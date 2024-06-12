@@ -1,0 +1,76 @@
+PODS:
+  - appspector (0.0.1):
+    - AppSpectorSDK
+    - Flutter
+  - AppSpectorSDK (1.4.8)
+  - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
+  - location (0.0.1):
+    - Flutter
+  - network_info_plus (0.0.1):
+    - Flutter
+  - permission_handler_apple (9.1.1):
+    - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - simple_wifi_info (1.0.0):
+    - Flutter
+  - Toast (4.0.0)
+  - wifi_iot (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - appspector (from `.symlinks/plugins/appspector/ios`)
+  - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - simple_wifi_info (from `.symlinks/plugins/simple_wifi_info/ios`)
+  - wifi_iot (from `.symlinks/plugins/wifi_iot/ios`)
+
+SPEC REPOS:
+  trunk:
+    - AppSpectorSDK
+    - Toast
+
+EXTERNAL SOURCES:
+  appspector:
+    :path: ".symlinks/plugins/appspector/ios"
+  Flutter:
+    :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  network_info_plus:
+    :path: ".symlinks/plugins/network_info_plus/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  simple_wifi_info:
+    :path: ".symlinks/plugins/simple_wifi_info/ios"
+  wifi_iot:
+    :path: ".symlinks/plugins/wifi_iot/ios"
+
+SPEC CHECKSUMS:
+  appspector: 329416dd93c1d6140148a6ade72718a5d2b8566d
+  AppSpectorSDK: 723a4da70eb97e736d745a3f40e32531fbc742bd
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  network_info_plus: 9d930145451916919786087c4173226363616071
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  simple_wifi_info: 8b76865f047abea3256b1e2089f081b1d53caac2
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
+
+PODFILE CHECKSUM: a079877852ea1f7d47b483fd51a68e3779458a00
+
+COCOAPODS: 1.14.3
