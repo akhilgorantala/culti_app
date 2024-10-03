@@ -33,8 +33,11 @@ dependencies:
   flutter_picker: ^2.1.0
   network_info_plus: ^5.0.3
   simple_wifi_info: ^1.0.2
-  appspector: ^0.9.0
   intl: ^0.18.0
+  system_date_time_format: any
+  flutter_blue_plus: ^1.32.8
+  loading_animation_widget: ^1.2.1
+  flutter_bounceable: ^1.1.0
 
 dev_dependencies:
   flutter_test:

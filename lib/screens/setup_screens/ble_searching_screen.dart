@@ -1,55 +1,61 @@
-import 'package:culti_app/provider/configure_provider.dart';
-import 'package:culti_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:system_date_time_format/system_date_time_format.dart';
 
-class SearchingScreen extends StatefulWidget {
+import '../../provider/ble_provider.dart';
+import '../../provider/devices_provider.dart';
+import '../home_screen.dart';
+
+class BleSearchingScreen extends StatefulWidget {
   final String ssid;
   final String password;
-  final String bssid;
+  final String userName;
+  final String macAddress;
 
-  const SearchingScreen({
+  const BleSearchingScreen({
     super.key,
     required this.ssid,
     required this.password,
-    required this.bssid,
+    required this.userName,
+    required this.macAddress,
   });
 
   @override
-  State<SearchingScreen> createState() => _SearchingScreenState();
+  State<BleSearchingScreen> createState() => _BleSearchingScreenState();
 }
 
-class _SearchingScreenState extends State<SearchingScreen> {
+class _BleSearchingScreenState extends State<BleSearchingScreen> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      checkTimeFormat();
-      Provider.of<ConfigureProvider>(context, listen: false)
-          .startPro(widget.ssid, widget.bssid, widget.password)
-          .then((value) {
-        print(value);
-        if (value == true) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        }
+      final bleProvider = Provider.of<BleProvider>(context, listen: false);
+      bleProvider
+          .sendData(
+              '{"SSID":"${widget.ssid}","PASS":"${widget.password}","rcv_did":"${widget.userName}"}')
+          .whenComplete(() {
+        bleProvider.device.connectionState.listen((event) {
+          if (event == BluetoothConnectionState.disconnected) {
+            final deviceProvider =
+                Provider.of<DevicesProvider>(context, listen: false);
+            deviceProvider.addDevice(
+                deviceProvider.deviceName.text, widget.macAddress);
+            Future.delayed(const Duration(seconds: 4), () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+            });
+          }
+        });
       });
     });
   }
 
-  void checkTimeFormat() async {
-    final patterns = SystemDateTimeFormat.of(context);
-    final timePattern = patterns.timePattern;
-    print('Time Format: $timePattern');
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<ConfigureProvider>(builder: (context, provider, child) {
+    return Consumer<BleProvider>(builder: (context, provider, child) {
       return Scaffold(
         body: SafeArea(
           child: Column(
@@ -63,7 +69,7 @@ class _SearchingScreenState extends State<SearchingScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: SvgPicture.asset('assets/cultiapp_logo.svg'),
               ),
-              if (provider.isConfig == null)
+              if (provider.isSent == null)
                 Column(
                   children: [
                     LottieBuilder.asset(
@@ -74,7 +80,7 @@ class _SearchingScreenState extends State<SearchingScreen> {
                     )
                   ],
                 )
-              else if (provider.isConfig == true)
+              else if (provider.isSent == true)
                 Column(
                   children: [
                     LottieBuilder.asset('assets/lotti/121018-done.json'),
@@ -84,7 +90,7 @@ class _SearchingScreenState extends State<SearchingScreen> {
                     )
                   ],
                 )
-              else if (provider.isConfig == false)
+              else if (provider.isSent == false)
                 Column(
                   children: [
                     LottieBuilder.asset('assets/lotti/133064-angry-cloud.json'),

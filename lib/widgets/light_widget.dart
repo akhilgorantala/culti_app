@@ -47,6 +47,8 @@ class LightWidget extends StatelessWidget {
                       groupValue: provider.lightControlAllIndividually,
                       onChanged: (int? value) {
                         provider.lightControlAllIndividuallyHandle(value!);
+                        provider.selectLED(1);
+                        provider.selectedLED(1);
                       },
                     ),
                     const Text(
@@ -206,12 +208,7 @@ class LightWidget extends StatelessWidget {
                       disableHour: false,
                       context: context,
                       value: provider.lightOff,
-                      sunrise: TimeOfDay(hour: 6, minute: 0),
-                      // // optional
-                      sunset: TimeOfDay(hour: 18, minute: 0),
-                      // optional
                       duskSpanInMinutes: 120,
-                      // optional
                       onChange: provider.lightOffTimeChanged,
                     ),
                   );
@@ -286,8 +283,8 @@ class LightWidget extends StatelessWidget {
                         provider.selectedLED(1);
                       },
                       child: Container(
-                        height: 30,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: provider.selectedLEDValue == 1
@@ -310,8 +307,8 @@ class LightWidget extends StatelessWidget {
                         provider.selectedLED(1);
                       },
                       child: Container(
-                        height: 30,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: provider.selectedLEDValue == 2
@@ -334,8 +331,8 @@ class LightWidget extends StatelessWidget {
                         provider.selectedLED(1);
                       },
                       child: Container(
-                        height: 30,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: provider.selectedLEDValue == 3

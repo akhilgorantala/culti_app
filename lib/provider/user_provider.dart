@@ -7,8 +7,24 @@ class UserProvider extends ChangeNotifier {
 
   UserProvider({required this.sharedPreferences});
 
-  Future<String?> isLogin() async {
+  String getUserName() {
     String? data = sharedPreferences.getString(AppConstants.USERNAME);
-    return data;
+    return data ?? '';
+  }
+
+  String getMacAddress() {
+    String? data =
+        sharedPreferences.getString(AppConstants.SELECTED_MACADDRESS);
+    return data ?? '';
+  }
+
+  String getVersionUrl() {
+    String? data = sharedPreferences.getString(AppConstants.FIRMWARE_URL);
+    return data ?? '';
+  }
+
+  String getVersion() {
+    String? data = sharedPreferences.getString(AppConstants.VERSION);
+    return data ?? '';
   }
 }

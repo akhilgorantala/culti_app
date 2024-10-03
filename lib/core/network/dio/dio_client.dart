@@ -43,8 +43,16 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    bool useAuth = false,
   }) async {
     try {
+      options ??= Options();
+      if (useAuth && token!.isNotEmpty) {
+        options.headers = {
+          ...?options.headers,
+          'Authorization': 'Bearer $token',
+        };
+      }
       var response = await dio!.get(
         uri,
         queryParameters: queryParameters,
@@ -70,8 +78,16 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool useAuth = false,
   }) async {
     try {
+      options ??= Options();
+      if (useAuth && token!.isNotEmpty) {
+        options.headers = {
+          ...?options.headers,
+          'Authorization': 'Bearer $token',
+        };
+      }
       var response = await dio!.post(
         uri,
         data: data,
@@ -97,8 +113,16 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool useAuth = false,
   }) async {
     try {
+      options ??= Options();
+      if (useAuth && token!.isNotEmpty) {
+        options.headers = {
+          ...?options.headers,
+          'Authorization': 'Bearer $token',
+        };
+      }
       var response = await dio!.put(
         uri,
         data: data,
@@ -122,8 +146,16 @@ class DioClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
+    bool useAuth = false,
   }) async {
     try {
+      options ??= Options();
+      if (useAuth && token!.isNotEmpty) {
+        options.headers = {
+          ...?options.headers,
+          'Authorization': 'Bearer $token',
+        };
+      }
       var response = await dio!.delete(
         uri,
         data: data,

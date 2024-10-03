@@ -1,6 +1,6 @@
 import 'package:culti_app/provider/configure_provider.dart';
 import 'package:culti_app/screens/home_screen.dart';
-import 'package:culti_app/screens/setup_screens/wifi_credentials_screen.dart';
+import 'package:culti_app/screens/setup_screens/controller_name_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -36,10 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: SvgPicture.asset('assets/cultiapp_logo.svg'),
                   ),
-                  // PageView(
-                  //   children: [],
-                  // ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: Text(
                       'Setup\nController',
@@ -49,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Login with your account',
                     style: TextStyle(
                       fontSize: 18,
@@ -64,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: 'Password',
                     controller: provider.userPassword,
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Text(
                       'Check your order confirmation email\nor go to our website to set up account',
@@ -75,52 +72,52 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  // Padding(
+                  //     padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                  //     child: Container(
+                  //       width: 107,
+                  //       height: 45,
+                  //       decoration: BoxDecoration(
+                  //           color: Colors.grey.shade300,
+                  //           borderRadius: BorderRadius.circular(30)),
+                  //       child: const Center(
+                  //           child: Text(
+                  //         '7:00 AM',
+                  //         style: TextStyle(
+                  //           fontWeight: FontWeight.w500,
+                  //           fontSize: 16,
+                  //         ),
+                  //       )),
+                  //     )),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 25,
+                  //       width: 25,
+                  //       child: Checkbox(value: false, onChanged: (value) {}),
+                  //     ),
+                  //     const Text(
+                  //       ' 24 hours clock',
+                  //       style: TextStyle(
+                  //         fontSize: 13,
+                  //         fontWeight: FontWeight.w500,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   Padding(
-                      padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                      child: Container(
-                        width: 107,
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Center(
-                            child: Text(
-                          '7:00 AM',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        )),
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 25,
-                        width: 25,
-                        child: Checkbox(value: false, onChanged: (value) {}),
-                      ),
-                      Text(
-                        ' 24 hours clock',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
                     child: SpringButton(
                       SpringButtonType.OnlyScale,
                       Container(
                         height: 40,
                         width: 115,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Color(0xff37B44B),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(100))),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'NEXT',
                             style: TextStyle(
@@ -133,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       scaleCoefficient: 0.95,
                       onTap: () {
+                        provider.tokenLogin();
                         provider.login().then((value) {
                           if (value != false && provider.isDemo != false) {
                             Navigator.push(
@@ -145,13 +143,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        WifiCredentialsScreen()));
+                                        ControllerNameScreen()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             const WifiCredentialsScreen()));
                           }
                         });
                       },
                     ),
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(

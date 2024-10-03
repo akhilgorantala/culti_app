@@ -1,15 +1,11 @@
-import 'dart:io';
-
-import 'package:appspector/appspector.dart';
 import 'package:culti_app/core/utils/app_constants.dart';
 import 'package:culti_app/core/utils/utils.dart';
 import 'package:culti_app/model/api_response.dart';
 import 'package:culti_app/model/auth_response.dart';
+import 'package:culti_app/model/token_auth_response.dart';
 import 'package:esp_smartconfig/esp_smartconfig.dart';
 import 'package:flutter/material.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wifi_iot/wifi_iot.dart';
 
 import '../core/network/dio/dio_client.dart';
 import '../repo/auth_repository.dart';
@@ -25,14 +21,8 @@ class ConfigureProvider extends ChangeNotifier {
     required this.sharedPreferences,
   });
 
-  final TextEditingController ssid = TextEditingController();
-  final TextEditingController bssid = TextEditingController();
-  final TextEditingController password = TextEditingController();
-
   final TextEditingController userName = TextEditingController();
   final TextEditingController userPassword = TextEditingController();
-
-  int? frequency;
 
   bool? _isConfig;
 
@@ -46,7 +36,7 @@ class ConfigureProvider extends ChangeNotifier {
 
   bool get isDemo => _isDemo;
 
-  Future<bool> startPro() async {
+  Future<bool> startPro(String ssid, bssid, password) async {
     String? data = sharedPreferences.getString(AppConstants.USERNAME);
 
     bool isSuccess = false;
@@ -54,7 +44,6 @@ class ConfigureProvider extends ChangeNotifier {
     final provisioner = Provisioner.espTouchV2();
 
     provisioner.listen((response) {
-      Logger.d('DEVICE PROVISIONED', response.bssidText);
       print("Device ${response.bssidText} connected to WiFi!");
       _isConfig = true;
       isSuccess = true; // Update isSuccess to true on successful connection
@@ -63,9 +52,9 @@ class ConfigureProvider extends ChangeNotifier {
 
     try {
       await provisioner.start(ProvisioningRequest.fromStrings(
-        ssid: ssid.text,
-        bssid: bssid.text,
-        password: password.text,
+        ssid: ssid,
+        bssid: bssid,
+        password: password,
         encryptionKey: 'secret key aes!!',
         reservedData: data, //13 bytes
       ));
@@ -80,7 +69,6 @@ class ConfigureProvider extends ChangeNotifier {
         notifyListeners(); // Notify listeners about the change in isConfig state
       }
     } catch (e) {
-      Logger.d('Provision Not Done', e.toString());
       print("Error during provisioning: $e");
       _isConfig = false;
       isSuccess = false; // Explicitly set isSuccess to false on exception
@@ -96,26 +84,30 @@ class ConfigureProvider extends ChangeNotifier {
   Future<bool> login() async {
     _isLoading = true;
     notifyListeners();
-
+    sharedPreferences.clear();
     bool isLoginSuccess = false;
-
     ApiResponse apiResponse =
         await repository.login(userName.text, userPassword.text);
-
     late AuthResponse data;
-
     if (apiResponse.response != null &&
         apiResponse.response?.statusCode == 200) {
-      data = AuthResponse.fromJson(apiResponse.response?.data);
+      Map<String, dynamic> response = apiResponse.response?.data;
 
-      if (data.username == 'demoaccount') {
-        _isDemo = true;
-        showToast('Demo Account!');
+      if (response['success'] == true) {
+        data = AuthResponse.fromJson(response);
+        if (data.username == 'demoaccount') {
+          _isDemo = true;
+          showToast('Demo Account!');
+        }
+        sharedPreferences.setString(AppConstants.USERNAME, data.username);
+        sharedPreferences.setString(AppConstants.VERSION, data.firmwareVersion);
+        sharedPreferences.setString(
+            AppConstants.FIRMWARE_URL, data.firmwareUrl);
+        isLoginSuccess = true;
+      } else {
+        isLoginSuccess = false;
+        showToast('Your Username or Password Incorrect!');
       }
-
-      sharedPreferences.setString(AppConstants.USERNAME, data.username);
-
-      isLoginSuccess = true;
     } else {
       isLoginSuccess = false;
       showToast('Your Username or Password Incorrect!');
@@ -127,33 +119,17 @@ class ConfigureProvider extends ChangeNotifier {
     return isLoginSuccess;
   }
 
-  Future<void> getssid() async {
-    if (!Platform.isAndroid) {
-      final info = NetworkInfo();
-      final wifiName = await info.getWifiName();
-      final wifiBSSID = await info.getWifiBSSID();
-
-      ssid.text = wifiName!;
-      bssid.text = wifiBSSID!;
-    } else {
-      final ssidvalue = await WiFiForIoTPlugin.getSSID();
-      final bssidvalue = await WiFiForIoTPlugin.getBSSID();
-
-      ssid.text = ssidvalue!;
-      bssid.text = bssidvalue!;
+  Future<void> tokenLogin() async {
+    ApiResponse apiResponse =
+        await repository.tokenLogin(userName.text, userPassword.text);
+    if (apiResponse.response != null &&
+        apiResponse.response?.statusCode == 200) {
+      Map<String, dynamic> response = apiResponse.response?.data;
+      TokenAuthResponse data = TokenAuthResponse.fromJson(response);
+      sharedPreferences.setString(AppConstants.TOKEN, data.token);
+      print(data.token);
+      print('iam here');
+      dioClient.updateToken(data.token);
     }
-
-    Logger.d("SSID", ssid.text);
-    Logger.d("BSSID", bssid.text);
-
-    notifyListeners();
-  }
-
-  void getFrequency() async {
-    var value = await WiFiForIoTPlugin.getFrequency();
-    value = int.parse(value.toString()[0]);
-    frequency = value;
-    Logger.d('FREQUENCY', value.toString());
-    notifyListeners();
   }
 }

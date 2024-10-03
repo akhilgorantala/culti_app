@@ -54,6 +54,8 @@ class _FanPumpWidgetState extends State<FanPumpWidget> {
                         groupValue: provider.fanControlAllIndividually,
                         onChanged: (int? value) {
                           provider.fanControlAllIndividuallyHandle(value!);
+                          provider.selectFAN(1);
+                          provider.selectedFAN(1);
                         },
                       ),
                       const Text(
@@ -258,11 +260,8 @@ class _FanPumpWidgetState extends State<FanPumpWidget> {
                         context: context,
                         value: provider.fanOff,
                         sunrise: TimeOfDay(hour: 6, minute: 0),
-                        // // optional
                         sunset: TimeOfDay(hour: 18, minute: 0),
-                        // optional
                         duskSpanInMinutes: 120,
-                        // optional
                         onChange: provider.fanOffTimeChanged,
                       ),
                     );
@@ -337,8 +336,8 @@ class _FanPumpWidgetState extends State<FanPumpWidget> {
                           provider.selectedFAN(1);
                         },
                         child: Container(
-                          height: 30,
-                          width: 30,
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: provider.selectedFANValue == 1
@@ -361,8 +360,8 @@ class _FanPumpWidgetState extends State<FanPumpWidget> {
                           provider.selectedFAN(1);
                         },
                         child: Container(
-                          height: 30,
-                          width: 30,
+                          height: 40,
+                          width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: provider.selectedFANValue == 2
